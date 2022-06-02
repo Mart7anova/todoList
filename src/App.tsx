@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import s from'./App.module.css';
+import s from './App.module.css';
 import {Todolist} from './Todolist';
 import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm';
@@ -45,29 +45,20 @@ function App() {
         ]
     })
 
-    function removeTask(todoListID: string, id: string) {
+    const removeTask = (todoListID: string, id: string) => {
         setTasks({...tasks, [todoListID]: tasks[todoListID].filter(t => t.id !== id)})
     }
-    function addTask(todoListID: string, title: string) {
+    const addTask = (todoListID: string, title: string) => {
         const task: taskType = {id: v1(), title, isDone: false}
         setTasks({...tasks, [todoListID]: [task, ...tasks[todoListID]]})
     }
-    function changeTodoListsFilter(todoListID: string, filter: FilterValuesType) {
-        setTodoLists(todoLists.map(todo => todo.id === todoListID ? {...todo, filter} : todo))
-    }
-    function changeTasksStatus(todoListID: string, id: string, isDone: boolean) {
+    const changeTasksStatus = (todoListID: string, id: string, isDone: boolean) => {
         const newTask = tasks[todoListID].map(t => t.id === id ? {...t, isDone} : t)
         setTasks({...tasks, [todoListID]: newTask})
     }
-    const removeTodoList = (todoListID: string) => {
-        setTodoLists(todoLists.filter(todo => todo.id !== todoListID))
-        delete tasks[todoListID]
-    }
-    const addTodoList = (title: string) =>{
-        const newTodoListID = v1()
-        const newTodoList: todoListType={ id:newTodoListID, title, filter: 'all'}
-        setTodoLists([newTodoList,...todoLists])
-        setTasks({...tasks, [newTodoListID]:[]})
+    const changeTaskTitle = (todoListID: string, id: string, title: string) => {
+        const newTask = tasks[todoListID].map(t => t.id === id ? {...t, title} : t)
+        setTasks({...tasks, [todoListID]: newTask})
     }
     const getTasksForRender = (todoList: todoListType) => {
         let tasksForRender = tasks[todoList.id]
@@ -80,7 +71,26 @@ function App() {
         return tasksForRender
     }
 
-    const todoListsComponents = todoLists.length ? todoLists.map(todo => {
+    const removeTodoList = (todoListID: string) => {
+        setTodoLists(todoLists.filter(todo => todo.id !== todoListID))
+        delete tasks[todoListID]
+    }
+    const addTodoList = (title: string) => {
+        const newTodoListID = v1()
+        const newTodoList: todoListType = {id: newTodoListID, title, filter: 'all'}
+        setTodoLists([newTodoList, ...todoLists])
+        setTasks({...tasks, [newTodoListID]: []})
+    }
+    const changeTodoListsFilter = (todoListID: string, filter: FilterValuesType) => {
+        setTodoLists(todoLists.map(todo => todo.id === todoListID ? {...todo, filter} : todo))
+    }
+    const changeTodoListTitle = (todoListID: string, title: string) => {
+        setTodoLists(todoLists.map(todo => todo.id === todoListID ? {...todo, title} : todo))
+    }
+
+
+    const todoListsComponents = todoLists.length
+        ? todoLists.map(todo => {
             return (
                 <Todolist key={todo.id}
                           todoListID={todo.id}
@@ -91,15 +101,19 @@ function App() {
                           removeTask={removeTask}
                           removeTodoList={removeTodoList}
                           addTask={addTask}
-                          changetodoListFilter={changeTodoListsFilter}
-                          changeTasksStatus={changeTasksStatus}/>
-
-            )
-        }) : <span>Create your first TodoList!</span>
+                          changeTasksStatus={changeTasksStatus}
+                          changeTaskTitle={changeTaskTitle}
+                          changeTodoListTitle={changeTodoListTitle}
+                          changeTodoListFilter={changeTodoListsFilter}
+                />)})
+        : <span>Create your first TodoList!</span>
     return (
-        <div className={s.App}>
-            <AddItemForm callBack={addTodoList} />
-            {todoListsComponents}
+        <div>
+            <div style={{marginLeft:'30px'}}>Create new to do list:
+                <AddItemForm callBack={addTodoList}/></div>
+            <div className={s.todolist}>
+                {todoListsComponents}
+            </div>
         </div>
     );
 }
