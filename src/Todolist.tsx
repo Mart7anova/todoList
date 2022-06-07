@@ -1,8 +1,9 @@
 import {FilterValuesType} from './App';
 import s from './App.module.css'
-import {Checkbox} from './components/Checkbox';
 import {AddItemForm} from './components/AddItemForm';
 import {EditableSpan} from './components/EditableSpan';
+import {Button, ButtonGroup, Checkbox, IconButton, List, ListItem} from '@material-ui/core';
+import {HighlightOff} from '@material-ui/icons';
 
 type TaskType = {
     id: string
@@ -20,8 +21,8 @@ type PropsType = {
     removeTodoList: (todoListID: string) => void
     addTask: (todoListID: string, title: string) => void
     changeTasksStatus: (todoListID: string, id: string, isDone: boolean) => void
-    changeTaskTitle: (todoListID: string, id: string, title: string)=> void
-    changeTodoListTitle:(todoListID: string, title: string) => void
+    changeTaskTitle: (todoListID: string, id: string, title: string) => void
+    changeTodoListTitle: (todoListID: string, title: string) => void
     changeTodoListFilter: (todoListID: string, value: FilterValuesType) => void
 
 
@@ -47,38 +48,53 @@ export function Todolist(props: PropsType) {
     const onCompletedClickHandler = () => props.changeTodoListFilter(props.todoListID, 'completed');
 
 
-    const allButtonClasses = props.filter === 'all' ? s.activeFilter : ''
-    const activeButtonClasses = props.filter === 'active' ? s.activeFilter : ''
-    const completeButtonClasses = props.filter === 'completed' ? s.activeFilter : ''
-
     return (
         <div>
-            <h3><EditableSpan title={props.title} callBack={changeTodoListTitleHandler}/>
-                <button onClick={() => props.removeTodoList(props.todoListID)}>x</button>
+            <h3>
+                <EditableSpan title={props.title} callBack={changeTodoListTitleHandler}/>
+                <IconButton onClick={() => props.removeTodoList(props.todoListID)} size={'small'}>
+                    <HighlightOff/>
+                </IconButton>
             </h3>
+
             <AddItemForm callBack={addTaskHandler}/>
             {props.tasks.length
-                ? <ul>
+                ? <List>
                     {props.tasks.map(t => {
-                        return <li key={t.id} className={t.isDone ? s.isDone : ''}>
-                            <Checkbox checked={t.isDone} callBack={(isDone) => changeIsDoneHandler(t.id, isDone)}/>
-                            {/*<span>{t.title}</span>*/}
-                            <EditableSpan title={t.title} callBack={(title)=>changeTaskTitleHandler(t.id, title)}/>
-                            <button onClick={() => removeTaskHandler(t.id)}>x</button>
-                        </li>
-                    })}</ul>
+                        return <ListItem key={t.id} className={t.isDone ? s.isDone : ''} style={{padding: '0px'}}>
+                            <Checkbox
+                                checked={t.isDone}
+                                onChange={(e) => changeIsDoneHandler(t.id, e.currentTarget.checked)}
+                                color={'primary'}
+                            />
+                            <EditableSpan
+                                title={t.title}
+                                callBack={(title) => changeTaskTitleHandler(t.id, title)}/>
+                            <IconButton
+                                onClick={() => removeTaskHandler(t.id)}
+                                size={'small'}>
+                                <HighlightOff/>
+                            </IconButton>
+                        </ListItem>
+                    })}</List>
                 : <span>List is empty</span>
             }
             <div>
-                <button className={allButtonClasses}
-                        onClick={onAllClickHandler}>All
-                </button>
-                <button className={activeButtonClasses}
-                        onClick={onActiveClickHandler}>Active
-                </button>
-                <button className={completeButtonClasses}
-                        onClick={onCompletedClickHandler}>Completed
-                </button>
+                <ButtonGroup color="primary"
+                             disableElevation>
+                    <Button variant={props.filter === 'all' ? 'contained' : 'outlined'}
+                            onClick={onAllClickHandler}>
+                        All
+                    </Button>
+                    <Button variant={props.filter === 'active' ? 'contained' : 'outlined'}
+                            onClick={onActiveClickHandler}>
+                        Active
+                    </Button>
+                    <Button variant={props.filter === 'completed' ? 'contained' : 'outlined'}
+                            onClick={onCompletedClickHandler}>
+                        Completed
+                    </Button>
+                </ButtonGroup>
             </div>
         </div>
     )
