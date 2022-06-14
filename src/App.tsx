@@ -6,7 +6,7 @@ import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography}
 import {Menu} from '@material-ui/icons';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
-export type todoListType = {
+export type TodoListType = {
     id: string
     title: string
     filter: FilterValuesType
@@ -26,7 +26,7 @@ function App() {
     const todoListID_1 = v1()
     const todoListID_2 = v1()
 
-    const [todoLists, setTodoLists] = useState<Array<todoListType>>([
+    const [todoLists, setTodoLists] = useState<Array<TodoListType>>([
         {id: todoListID_1, title: 'What to learn', filter: 'all'},
         {id: todoListID_2, title: 'What to bay', filter: 'all'},
     ])
@@ -61,7 +61,7 @@ function App() {
         const newTask = tasks[todoListID].map(t => t.id === id ? {...t, title} : t)
         setTasks({...tasks, [todoListID]: newTask})
     }
-    const getTasksForRender = (todoList: todoListType) => {
+    const getTasksForRender = (todoList: TodoListType) => {
         let tasksForRender = tasks[todoList.id]
         if (todoList.filter === 'active') {
             tasksForRender = tasks[todoList.id].filter(t => !t.isDone)
@@ -78,7 +78,7 @@ function App() {
     }
     const addTodoList = (title: string) => {
         const newTodoListID = v1()
-        const newTodoList: todoListType = {id: newTodoListID, title, filter: 'all'}
+        const newTodoList: TodoListType = {id: newTodoListID, title, filter: 'all'}
         setTodoLists([newTodoList, ...todoLists])
         setTasks({...tasks, [newTodoListID]: []})
     }
