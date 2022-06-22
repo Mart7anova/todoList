@@ -1,9 +1,9 @@
 import {v1} from 'uuid';
 import {FilterValuesType, TodoListType} from '../App';
 import {
-    RemoveTodoListAC,
-    todolistsReducer,
-    AddTodoListAC, ChangeTodoListFilterAC, ChangeTodoListTitleAC
+    removeTodoListAC,
+    todoListsReducer,
+    addTodoListAC, changeTodoListFilterAC, changeTodoListTitleAC
 } from './todolist-reducer';
 
 test('correct todolist should be removed', () => {
@@ -17,7 +17,7 @@ test('correct todolist should be removed', () => {
     ]
 
     //вызов тестируемой функции
-    const endState = todolistsReducer(startState, RemoveTodoListAC(todolistId2))
+    const endState = todoListsReducer(startState, removeTodoListAC(todolistId2))
 
     //проверка результата
     expect(endState.length).toBe(1);
@@ -35,7 +35,7 @@ test('correct todolist should be added', () => {
         {id: todolistId2, title: 'What to buy', filter: 'all'}
     ]
 
-    const endState = todolistsReducer(startState, AddTodoListAC(v1(), newTodolistTitle))
+    const endState = todoListsReducer(startState, addTodoListAC(newTodolistTitle))
 
     expect(endState.length).toBe(3);
     expect(endState[2].title).toBe(newTodolistTitle);
@@ -52,8 +52,8 @@ test('correct filter of todolist should be changed', () => {
         {id: todolistId2, title: 'What to buy', filter: 'all'}
     ]
 
-    const action = ChangeTodoListFilterAC(todolistId2, newFilter)
-    const endState = todolistsReducer(startState, action);
+    const action = changeTodoListFilterAC(todolistId2, newFilter)
+    const endState = todoListsReducer(startState, action);
 
     expect(endState[0].filter).toBe('all');
     expect(endState[1].filter).toBe(newFilter);
@@ -70,8 +70,8 @@ test('correct todolist should change its name', () => {
         {id: todolistId2, title: 'What to buy', filter: 'all'}
     ]
 
-    const action = ChangeTodoListTitleAC(todolistId2, newTodolistTitle)
-    const endState = todolistsReducer(startState, action);
+    const action = changeTodoListTitleAC(todolistId2, newTodolistTitle)
+    const endState = todoListsReducer(startState, action);
 
     expect(endState[0].title).toBe('What to learn');
     expect(endState[1].title).toBe(newTodolistTitle);
