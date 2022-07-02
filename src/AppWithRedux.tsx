@@ -1,6 +1,5 @@
-import React, {useReducer} from 'react';
+import React from 'react';
 import {Todolist} from './Todolist';
-import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
@@ -8,10 +7,11 @@ import {
     addTodoListAC,
     changeTodoListFilterAC,
     changeTodoListTitleAC,
-    removeTodoListAC,
-    todoListsReducer
+    removeTodoListAC
 } from './state/todolist-reducer';
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './state/tasks-reducer';
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './state/tasks-reducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootStateType} from './state/store';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 export type TodoListType = {
@@ -29,42 +29,22 @@ export type TasksStateType = {
     [todoListID: string]: Array<TaskType>
 }
 
-function AppWithReducers() {
-    //BLL
-    const todoListID_1 = v1()
-    const todoListID_2 = v1()
-
-    const [todoLists, dispatchToTodoList] = useReducer(todoListsReducer, [
-        {id: todoListID_1, title: 'What to learn', filter: 'all'},
-        {id: todoListID_2, title: 'What to bay', filter: 'all'},
-    ])
-    const [tasks, dispatchToTasks] = useReducer(tasksReducer, {
-        [todoListID_1]: [
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'ReactJS', isDone: false},
-            {id: v1(), title: 'Rest API', isDone: false},
-            {id: v1(), title: 'GraphQL', isDone: false},
-        ],
-        [todoListID_2]: [
-            {id: v1(), title: 'Sugar', isDone: true},
-            {id: v1(), title: 'Chocolate', isDone: true},
-            {id: v1(), title: 'Cake', isDone: false},
-            {id: v1(), title: 'Ice-cream', isDone: false},
-        ]
-    })
+function AppWithRedux() {
+    const dispatch = useDispatch()
+    const todoLists = useSelector<AppRootStateType, Array<TodoListType>>(state => state.todoLists)
+    const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
 
     const removeTask = (id: string, todoListID: string) => {
-        dispatchToTasks(removeTaskAC(id, todoListID))
+        dispatch(removeTaskAC(id, todoListID))
     }
     const addTask = (todoListID: string, title: string) => {
-        dispatchToTasks(addTaskAC(todoListID, title))
+        dispatch(addTaskAC(todoListID, title))
     }
     const changeTasksStatus = (id: string, todoListID: string, isDone: boolean) => {
-        dispatchToTasks(changeTaskStatusAC(id, todoListID, isDone))
+        dispatch(changeTaskStatusAC(id, todoListID, isDone))
     }
     const changeTaskTitle = (id: string, todoListID: string, title: string) => {
-        dispatchToTasks(changeTaskTitleAC(id, todoListID, title))
+        dispatch(changeTaskTitleAC(id, todoListID, title))
     }
     const getTasksForRender = (todoList: TodoListType) => {
         let tasksForRender = tasks[todoList.id]
@@ -78,20 +58,16 @@ function AppWithReducers() {
     }
 
     const removeTodoList = (todoListID: string) => {
-        const action = removeTodoListAC(todoListID)
-        dispatchToTodoList(action)
-        dispatchToTasks(action)
+        dispatch(removeTodoListAC(todoListID))
     }
     const addTodoList = (title: string) => {
-        const action = addTodoListAC(title)
-        dispatchToTodoList(action)
-        dispatchToTasks(action)
+        dispatch(addTodoListAC(title))
     }
     const changeTodoListsFilter = (todoListID: string, filter: FilterValuesType) => {
-        dispatchToTodoList(changeTodoListFilterAC(todoListID, filter))
+        dispatch(changeTodoListFilterAC(todoListID, filter))
     }
     const changeTodoListTitle = (todoListID: string, title: string) => {
-        dispatchToTodoList(changeTodoListTitleAC(todoListID, title))
+        dispatch(changeTodoListTitleAC(todoListID, title))
     }
 
 
@@ -145,4 +121,4 @@ function AppWithReducers() {
     );
 }
 
-export default AppWithReducers;
+export default AppWithRedux;
