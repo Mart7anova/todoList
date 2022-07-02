@@ -63,7 +63,7 @@ function AppWithRedux() {
                     </Paper>
                 </Grid>)
         })
-        : <span>Create your first TodoList!</span>
+        : <div style={{padding: '10px 15px'}}>Create your first TodoList!</div>
     return (
         <div>
 
