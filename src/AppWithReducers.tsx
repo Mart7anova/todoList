@@ -1,5 +1,4 @@
 import React, {useReducer} from 'react';
-import {Todolist} from './Todolist';
 import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@material-ui/core';
@@ -12,6 +11,7 @@ import {
     todoListsReducer
 } from './state/todolist-reducer';
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './state/tasks-reducer';
+import {TodolistForApp} from './TodolistForApp';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 export type TodoListType = {
@@ -101,7 +101,7 @@ function AppWithReducers() {
                 <Grid item key={todo.id}>
                     <Paper elevation={1}
                            style={{padding: '20px'}}>
-                        <Todolist todoListID={todo.id}
+                        <TodolistForApp todoListID={todo.id}
                                   title={todo.title}
                                   filter={todo.filter}
                                   tasks={getTasksForRender(todo)}

@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import {Todolist} from './Todolist';
 import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
+import { TodolistForApp } from './TodolistForApp';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 export type TodoListType = {
@@ -96,18 +96,18 @@ function App() {
                 <Grid item key={todo.id}>
                     <Paper elevation={1}
                            style={{padding: '20px'}}>
-                        <Todolist todoListID={todo.id}
-                                  title={todo.title}
-                                  filter={todo.filter}
-                                  tasks={getTasksForRender(todo)}
+                        <TodolistForApp todoListID={todo.id}
+                                        title={todo.title}
+                                        filter={todo.filter}
+                                        tasks={getTasksForRender(todo)}
 
-                                  removeTask={removeTask}
-                                  removeTodoList={removeTodoList}
-                                  addTask={addTask}
-                                  changeTasksStatus={changeTasksStatus}
-                                  changeTaskTitle={changeTaskTitle}
-                                  changeTodoListTitle={changeTodoListTitle}
-                                  changeTodoListFilter={changeTodoListsFilter}
+                                        removeTask={removeTask}
+                                        removeTodoList={removeTodoList}
+                                        addTask={addTask}
+                                        changeTasksStatus={changeTasksStatus}
+                                        changeTaskTitle={changeTaskTitle}
+                                        changeTodoListTitle={changeTodoListTitle}
+                                        changeTodoListFilter={changeTodoListsFilter}
                         />
                     </Paper>
                 </Grid>)

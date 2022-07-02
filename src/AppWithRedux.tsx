@@ -1,5 +1,4 @@
 import React from 'react';
-import {Todolist} from './Todolist';
 import {AddItemForm} from './components/AddItemForm';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
@@ -9,9 +8,10 @@ import {
     changeTodoListTitleAC,
     removeTodoListAC
 } from './state/todolist-reducer';
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './state/tasks-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './state/store';
+import {Todolist} from './Todolist';
+
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 export type TodoListType = {
@@ -32,30 +32,6 @@ export type TasksStateType = {
 function AppWithRedux() {
     const dispatch = useDispatch()
     const todoLists = useSelector<AppRootStateType, Array<TodoListType>>(state => state.todoLists)
-    const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
-
-    const removeTask = (id: string, todoListID: string) => {
-        dispatch(removeTaskAC(id, todoListID))
-    }
-    const addTask = (todoListID: string, title: string) => {
-        dispatch(addTaskAC(todoListID, title))
-    }
-    const changeTasksStatus = (id: string, todoListID: string, isDone: boolean) => {
-        dispatch(changeTaskStatusAC(id, todoListID, isDone))
-    }
-    const changeTaskTitle = (id: string, todoListID: string, title: string) => {
-        dispatch(changeTaskTitleAC(id, todoListID, title))
-    }
-    const getTasksForRender = (todoList: TodoListType) => {
-        let tasksForRender = tasks[todoList.id]
-        if (todoList.filter === 'active') {
-            tasksForRender = tasks[todoList.id].filter(t => !t.isDone)
-        }
-        if (todoList.filter === 'completed') {
-            tasksForRender = tasks[todoList.id].filter(t => t.isDone)
-        }
-        return tasksForRender
-    }
 
     const removeTodoList = (todoListID: string) => {
         dispatch(removeTodoListAC(todoListID))
@@ -80,13 +56,7 @@ function AppWithRedux() {
                         <Todolist todoListID={todo.id}
                                   title={todo.title}
                                   filter={todo.filter}
-                                  tasks={getTasksForRender(todo)}
-
-                                  removeTask={removeTask}
                                   removeTodoList={removeTodoList}
-                                  addTask={addTask}
-                                  changeTasksStatus={changeTasksStatus}
-                                  changeTaskTitle={changeTaskTitle}
                                   changeTodoListTitle={changeTodoListTitle}
                                   changeTodoListFilter={changeTodoListsFilter}
                         />
