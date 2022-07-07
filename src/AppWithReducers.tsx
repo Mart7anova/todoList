@@ -11,7 +11,6 @@ import {
     todoListsReducer
 } from './state/todolist-reducer';
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './state/tasks-reducer';
-import {TodolistForApp} from './TodolistForApp';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 export type TodoListType = {
@@ -101,7 +100,7 @@ function AppWithReducers() {
                 <Grid item key={todo.id}>
                     <Paper elevation={1}
                            style={{padding: '20px'}}>
-                        <TodolistForApp todoListID={todo.id}
+                        {/*<Todolist todoListID={todo.id}
                                   title={todo.title}
                                   filter={todo.filter}
                                   tasks={getTasksForRender(todo)}
@@ -113,7 +112,7 @@ function AppWithReducers() {
                                   changeTaskTitle={changeTaskTitle}
                                   changeTodoListTitle={changeTodoListTitle}
                                   changeTodoListFilter={changeTodoListsFilter}
-                        />
+                        />*/}
                     </Paper>
                 </Grid>)
         })

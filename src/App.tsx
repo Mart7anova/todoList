@@ -3,7 +3,7 @@ import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
-import { TodolistForApp } from './TodolistForApp';
+import { Todolist } from './Todolist';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 export type TodoListType = {
@@ -96,7 +96,7 @@ function App() {
                 <Grid item key={todo.id}>
                     <Paper elevation={1}
                            style={{padding: '20px'}}>
-                        <TodolistForApp todoListID={todo.id}
+                        {/*<Todolist todoListID={todo.id}
                                         title={todo.title}
                                         filter={todo.filter}
                                         tasks={getTasksForRender(todo)}
@@ -108,7 +108,7 @@ function App() {
                                         changeTaskTitle={changeTaskTitle}
                                         changeTodoListTitle={changeTodoListTitle}
                                         changeTodoListFilter={changeTodoListsFilter}
-                        />
+                        />*/}
                     </Paper>
                 </Grid>)
         })
