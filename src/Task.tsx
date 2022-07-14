@@ -2,7 +2,7 @@ import s from './App.module.css'
 import {EditableSpan} from './components/EditableSpan';
 import { Checkbox, IconButton, ListItem} from '@material-ui/core';
 import {HighlightOff} from '@material-ui/icons';
-import {memo, useCallback} from 'react';
+import {FC, memo, useCallback} from 'react';
 
 
 type TaskType = {
@@ -13,22 +13,19 @@ type TaskType = {
 
 type PropsType = {
     task: TaskType
-    isDone: boolean
 
     removeTask: (taskId: string) => void
     changeTasksStatus: (id: string, isDone: boolean) => void
     changeTaskTitle: (id: string, title: string) => void
 }
 
-export const Tasks:  React.FC<PropsType> = memo(props => {
+export const Task: FC<PropsType> = memo(props => {
     const {
         task,
-        isDone,
         removeTask,
         changeTasksStatus,
         changeTaskTitle,
     } = props
-    console.log('a')
 
     const removeTaskHandler = useCallback((id: string) => removeTask(id), [removeTask])
 
@@ -40,9 +37,9 @@ export const Tasks:  React.FC<PropsType> = memo(props => {
     }, [changeTaskTitle])
 
     return (
-        <ListItem className={isDone ? s.isDone : ''} style={{padding: '0px'}}>
+        <ListItem className={task.isDone ? s.isDone : ''} style={{padding: '0px'}}>
             <Checkbox
-                checked={isDone}
+                checked={task.isDone}
                 onChange={(e) => changeIsDoneHandler(task.id, e.currentTarget.checked)}
                 color={'primary'}
             />

@@ -1,12 +1,10 @@
 import {FilterValuesType} from './App';
-import s from './App.module.css'
 import {AddItemForm} from './components/AddItemForm';
 import {EditableSpan} from './components/EditableSpan';
-import {Button, ButtonGroup, Checkbox, IconButton, List, ListItem} from '@material-ui/core';
+import {Button, ButtonGroup, IconButton, List} from '@material-ui/core';
 import {HighlightOff} from '@material-ui/icons';
 import React, {memo, useCallback, useMemo} from 'react';
-import {TasksStateType, TodoListType} from './AppWithRedux';
-import {Tasks} from './Task';
+import {Task} from './Task';
 
 
 type TaskType = {
@@ -79,12 +77,12 @@ export const Todolist: React.FC<PropsType> = memo(props => {
             tasksForRender = tasks.filter(t => t.isDone)
         }
         return tasksForRender.map(t => {
-            return <Tasks key={t.id}
-                          task={t}
-                          isDone={t.isDone}
-                          removeTask={removeTaskHandler}
-                          changeTasksStatus={changeIsDoneHandler}
-                          changeTaskTitle={changeTaskTitleHandler}/>
+            return <Task key={t.id}
+                         task={t}
+                         removeTask={removeTaskHandler}
+                         changeTasksStatus={changeIsDoneHandler}
+                         changeTaskTitle={changeTaskTitleHandler}
+            />
         })
     }, [tasks, filter])
 
@@ -99,24 +97,7 @@ export const Todolist: React.FC<PropsType> = memo(props => {
 
             <AddItemForm callBack={addTaskHandler}/>
             {tasks.length
-                ? <List>
-                    {tasks.map(t => {
-                        return <ListItem key={t.id} className={t.isDone ? s.isDone : ''} style={{padding: '0px'}}>
-                            <Checkbox
-                                checked={t.isDone}
-                                onChange={(e) => changeTasksStatus(t.id, props.todoListID, e.currentTarget.checked)}
-                                color={'primary'}
-                            />
-                            <EditableSpan
-                                title={t.title}
-                                callBack={(title) => changeTaskTitle(t.id, props.todoListID, title)}/>
-                            <IconButton
-                                onClick={() => removeTask(t.id, props.todoListID)}
-                                size={'small'}>
-                                <HighlightOff/>
-                            </IconButton>
-                        </ListItem>
-                    })}</List>
+                ? <List>{tasksWithUseMemo}</List>
                 : <span>List is empty</span>
             }
             <div>
